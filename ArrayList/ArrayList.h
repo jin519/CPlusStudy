@@ -3,13 +3,29 @@
 #include <stdexcept>
 #include <initializer_list>
 #include <type_traits>
+#include <iostream>
+#include <string>
 
 template <typename T>
 class ArrayList
 {
 public:
 	ArrayList() = default;
-	ArrayList(const std::initializer_list<T>& args) noexcept;
+
+	explicit ArrayList(const size_t size) noexcept;
+	
+	explicit ArrayList(const std::initializer_list<T>& args) noexcept 
+	{
+		if ((args.size() == 1ULL) && std::is_integral<T>::value)
+		{
+			size_t size = 0ULL; 
+			memcpy(&size, args.begin(), sizeof(T));
+
+			__malloc(size); 
+		}
+		else
+			__init(args); 
+	}
 
 	~ArrayList() noexcept;
 
@@ -25,6 +41,8 @@ public:
 
 	T& operator[](const size_t index);
 
+	void show(const std::string& name) const;
+
 private:
 	T* __pMemory = nullptr;
 
@@ -32,31 +50,14 @@ private:
 	size_t __capacity = 0ULL;
 
 	void __free();
+	void __malloc(const size_t size); 
+	void __init(const std::initializer_list<T>& args); 
 };
 
 template<typename T>
-ArrayList<T>::ArrayList(const std::initializer_list<T>& args) noexcept
+ArrayList<T>::ArrayList(const size_t size) noexcept
 {
-	const size_t size = args.size();
-
-	if ((size == 1ULL) && std::is_integral<T>::value)
-	{
-		memcpy(&__capacity, args.begin(), sizeof(T));
-		__size = __capacity;
-
-		__pMemory = new T[__capacity];
-	}
-	else
-	{
-		__capacity = size;
-		__size = size;
-
-		__pMemory = new T[__capacity];
-
-		size_t index = 0ULL;
-		for (const auto& arg : args)
-			__pMemory[index++] = arg;
-	}
+	__malloc(size);
 }
 
 template <typename T>
@@ -107,13 +108,26 @@ void ArrayList<T>::remove(const size_t removeIndex)
 template<typename T>
 inline void ArrayList<T>::insert(const size_t insertIndex, const T& value)
 {
-	if (insertIndex >= __capacity)
-		throw std::out_of_range("index is out of range.");
-
 	++__size;
 
-	for (size_t i = (__size - 1ULL); i > insertIndex; i--)
-		__pMemory[i] = __pMemory[(i - 1)];
+	if (insertIndex >= __capacity)
+	{
+		__capacity = (insertIndex + 1ULL);
+		
+		T* pMemory = new T[__capacity];
+
+		for (size_t i = (__size - 1ULL); i > insertIndex; i--)
+			pMemory[i] = __pMemory[(i - 1)];
+
+		__free();
+
+		__pMemory = pMemory;
+	}
+	else 
+	{
+		for (size_t i = (__size - 1ULL); i > insertIndex; i--)
+			__pMemory[i] = __pMemory[(i - 1)];
+	}
 
 	__pMemory[insertIndex] = value;
 }
@@ -152,6 +166,17 @@ T& ArrayList<T>::operator[](const size_t index)
 }
 
 template<typename T>
+void ArrayList<T>::show(const std::string& name) const
+{
+	std::cout << "# " << name << std::endl;
+
+	for (size_t i = 0; i < __size; ++i)
+		std::cout << __pMemory[i] << std::endl;
+
+	std::cout << std::endl;
+}
+
+template<typename T>
 void ArrayList<T>::__free()
 {
 	if (__pMemory)
@@ -159,4 +184,23 @@ void ArrayList<T>::__free()
 		delete[] __pMemory;
 		__pMemory = nullptr;
 	}
+}
+
+template<typename T>
+void ArrayList<T>::__malloc(const size_t size)
+{
+	__capacity = size; 
+	__size = size; 
+
+	__pMemory = new T[size]; 
+}
+
+template<typename T>
+void ArrayList<T>::__init(const std::initializer_list<T>& args)
+{
+	__malloc(args.size()); 
+
+	size_t index = 0ULL;
+	for (const auto& arg : args)
+		__pMemory[index++] = arg;
 }

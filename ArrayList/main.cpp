@@ -1,6 +1,4 @@
-﻿#include <string>
-#include <iostream>
-#include "ArrayList.h"
+﻿#include "ArrayList.h"
 
 using namespace std;
 
@@ -39,20 +37,14 @@ int main()
 	list1[2] = 30;
 
 	// TEST 1
-	cout << "# list1" << endl;
-	for (size_t i = 0; i < list1.getSize(); ++i)
-		cout << list1[i] << endl;
-	cout << endl;
+	list1.show("list1"); 
 
 	// initializer list를 활용하여 원소 3개를 삽입하며 초기화
 	// initializer list에 대해 조사하여 글을 정리하여라.
 	ArrayList<string> list2{ "elem1", "elem2", "elem3" };
 
 	// TEST 2
-	cout << "# list2" << endl;
-	for (size_t i = 0; i < list2.getSize(); ++i)
-		cout << list2[i] << endl;
-	cout << endl;
+	list2.show("list2"); 
 
 	// list의 뒤쪽에 elem4, elem5를 추가
 	list2.add("elem4");
@@ -79,17 +71,25 @@ int main()
 	cout << list2[1] << endl;
 
 	// "elem3" 출력
-	cout << list2[2] << endl;
+	cout << list2[2] << endl << endl;
 
 	// TEST 3
-	const int list1Size = list1.getSize();
+	const int list1Size = int(list1.getSize());
 	ArrayList<int> list3{ list1Size };
-	memcpy(list3.getRaw(), list1.getRaw(), sizeof(int) * list1Size);
+	{
+		memcpy(list3.getRaw(), list1.getRaw(), sizeof(int) * list1Size);
+		list3.show("list3");
+	}
 
-	cout << endl;
-	cout << "# list3" << endl;
-	for (size_t i = 0; i < list1Size; ++i)
-		cout << list3[i] << endl;
+	// TEST 4
+	ArrayList<int> list4; 
+	{
+		list4.insert(0ULL, 5);
+		list4.show("list4"); 
+	}
+
+	// TEST 5
+	ArrayList<string> list5(6); 
 
 	return 0;
 }
