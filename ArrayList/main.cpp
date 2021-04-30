@@ -38,7 +38,7 @@ int main()
 	list1[1] = 20;
 	list1[2] = 30;
 
-	// TEST
+	// TEST 1
 	cout << "# list1" << endl;
 	for (size_t i = 0; i < list1.getSize(); ++i)
 		cout << list1[i] << endl;
@@ -48,7 +48,7 @@ int main()
 	// initializer list에 대해 조사하여 글을 정리하여라.
 	ArrayList<string> list2{ "elem1", "elem2", "elem3" };
 
-	// TEST 
+	// TEST 2
 	cout << "# list2" << endl;
 	for (size_t i = 0; i < list2.getSize(); ++i)
 		cout << list2[i] << endl;
@@ -81,7 +81,7 @@ int main()
 	// "elem3" 출력
 	cout << list2[2] << endl;
 
-	// TEST
+	// TEST 3
 	const int list1Size = list1.getSize();
 	ArrayList<int> list3{ list1Size };
 	memcpy(list3.getRaw(), list1.getRaw(), sizeof(int) * list1Size);
