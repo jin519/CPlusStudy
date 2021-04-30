@@ -12,20 +12,10 @@ class ArrayList
 public:
 	ArrayList() = default;
 
+	template <typename = typename std::enable_if_t<!std::is_integral_v<T>>>
 	explicit ArrayList(const size_t size) noexcept;
 	
-	explicit ArrayList(const std::initializer_list<T>& args) noexcept 
-	{
-		if ((args.size() == 1ULL) && std::is_integral<T>::value)
-		{
-			size_t size = 0ULL; 
-			memcpy(&size, args.begin(), sizeof(T));
-
-			__malloc(size); 
-		}
-		else
-			__init(args); 
-	}
+	explicit ArrayList(const std::initializer_list<T> args) noexcept;
 
 	~ArrayList() noexcept;
 
@@ -54,10 +44,17 @@ private:
 	void __init(const std::initializer_list<T>& args); 
 };
 
-template<typename T>
-ArrayList<T>::ArrayList(const size_t size) noexcept
+template <typename T>
+template <typename>
+ArrayList<T>::ArrayList(const size_t size) noexcept 
 {
-	__malloc(size);
+	__malloc(size); 
+}
+
+template<typename T>
+ArrayList<T>::ArrayList(const std::initializer_list<T> args) noexcept
+{
+	__init(args);
 }
 
 template <typename T>
