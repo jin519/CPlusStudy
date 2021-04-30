@@ -30,7 +30,7 @@ int main()
 
 		소괄호() 가 아닌 중괄호{} 로 생성자를 호출하는 uniform initializer에 대해 조사하여 글을 정리하여라.
 	*/
-	ArrayList<int> list1{ 3ULL };
+	ArrayList<int> list1 { 3ULL };
 
 	// operator[] 를 구현하여 index에 따라 해당 원소를 접근할 수 있도록 하여라.
 	int& first = list1[0];
