@@ -16,3 +16,5 @@ X x2{1}; // Parametrized constructor;
 
 X x4{x3}; // copy-constructor
 ```
+
+😎 uniform 초기화 방식을 사용하면 기본 타입, struct, class 등 대상 타입에 상관없이 {} 기호를 통해 일괄적으로 초기화 할 수 있어 코드 가독성 및 일관성 유지에 도움이 됩니다. 따라서 모던 c++에서는 =연산자를 통한 초기화가 거의 사용되지 않고 있습니다.
