@@ -4,7 +4,7 @@
 
 using namespace std; 
 
-TEST(case1, VarTest)
+TEST(VarTest, case1)
 {
 	// ºó var º¯¼ö »ý¼º
 	Var var;
