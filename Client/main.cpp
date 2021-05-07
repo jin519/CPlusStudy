@@ -1,9 +1,20 @@
 #include <iostream>
 
-// Var 프로젝트의 Var.h 참조
-#include "../Var/Var.h"
-
 using namespace std;
+
+int varMain();
+int staticCalculatorMain(); 
+
+int main() 
+{
+	int (*fp[2])() = { varMain, staticCalculatorMain };
+
+	return fp[1](); 
+}
+
+// --------------------------- Var
+
+#include "../Var/Var.h"
 
 struct TestStruct
 {
@@ -29,7 +40,7 @@ struct TestStruct
 	}
 };
 
-int main()
+int varMain()
 {
 	/*
 		모든 변수를 담을 수 있는 Var 클래스를 구현하여라.
@@ -84,4 +95,83 @@ int main()
 	cout << var.get<TestStruct>() << endl;
 
 	// Var 객체 소멸 시 내부 메모리 릴리즈 필요.
+
+	return 0; 
+}
+
+// --------------------------- StaticCalculator
+
+#include "../StaticCalculator/Number.h"
+#include "../StaticCalculator/StaticCalculator.h"
+
+template <typename T>
+static constexpr T getNumberValue(const Number<T>& src)
+{
+	return src.getValue();
+}
+
+int staticCalculatorMain() 
+{
+	/*
+		컴파일 타임에 동작이 모두 결정되는 static calculator를 구현하여라.
+		아래의 코드가 정상 동작하도록 로직을 구현하여라.
+	*/
+
+	/*
+		템플릿 파라미터로 숫자 타입만 입력받을 수 있는
+		Number 클래스를 구현하여라. 생성자로는 value를 하나 입력받을 수 있다.
+		생성자는 constexpr 생성자로 만들으시오.
+
+		참고: static_assert를 클래스 선언부에 직접 입력 시 컴파일 타임에
+		타입 파라미터를 체크할 수 있다.
+		예)
+		class Test
+		{
+			static_assert(false, "false!");
+		};
+
+		static_assert에 대해 조사하고 글을 정리하여라.
+	*/
+	constexpr Number<float> number1{ 5.f };
+
+	/*
+		Number 타입을 입력받아 내부의 value를 반환하는 getNumberValue()
+		함수를 구현하여라. getNumberValue() 함수는 constexpr 함수로 구현한다.
+		Number 클래스에서 값을 제공하기 위해 getValue() 멤버 함수를 구현한다.
+	*/
+	constexpr float val1 = getNumberValue<float>(number1);
+
+	constexpr Number<float> number2{ 10.f };
+	constexpr float val2 = getNumberValue(number2);
+
+	/*
+		컴파일 타임에 두 숫자를 입력받아 연산을 수행하는 StaticCalculator 클래스를
+		구현하여라. 이 클래스는 인스턴스를 생성할 수 없어야 하며, calc static 함수를
+		통해 계산 결과 값을 반환한다.
+
+		템플릿 파라미터는 차례로 <number 타입, lhs, rhs, 연산 타입> 이다.
+		연산 타입은 PLUS, MINUS, PRODUCT, DIVIDE 네 가지를 제공하여야 한다.
+		연산 타입은 constexpr 분기문을 통해 조사하시오.
+
+		calcResult1 위에 마우스를 올려 15.0f라는 값이 미리보기로 출력되는지 확인하여라.
+	*/
+	constexpr float calcResult1 =
+		StaticCalculator<float, val1, val2, OperationType::PLUS>::calc();
+
+	// 15 출력
+	cout << "calcResult1:" << calcResult1 << endl;
+
+	constexpr Number<int> number3{ 70 };
+	constexpr Number<int> number4{ 10 };
+
+	constexpr int calcResult2 =
+		StaticCalculator<int, number3.getValue(), number4.getValue(), OperationType::DIVIDE>::calc();
+
+	// 7 출력
+	cout << "calcResult2:" << calcResult2 << endl;
+
+	// 크기 7인 배열 생성
+	int arr[calcResult2]{};
+
+	return 0;
 }
