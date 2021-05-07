@@ -17,12 +17,12 @@ private:
 };
 
 template <typename T>
-inline constexpr Number<T>::Number(const T value) :
+constexpr Number<T>::Number(const T value) :
 	__value{ value }
 {}
 
 template<typename T>
-inline constexpr T Number<T>::getValue() const
+constexpr T Number<T>::getValue() const
 {
 	return __value; 
 }

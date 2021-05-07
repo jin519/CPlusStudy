@@ -13,7 +13,7 @@ private:
 };
 
 template<typename T, T lhs, T rhs, OperationType operationType>
-inline constexpr T StaticCalculator<T, lhs, rhs, operationType>::calc()
+constexpr T StaticCalculator<T, lhs, rhs, operationType>::calc()
 {
 	T retVal; 
 
