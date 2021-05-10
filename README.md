@@ -2,5 +2,5 @@
 
 👀 <a href="md/initializer_list.md">initializer_list</a> <br>
 👀 <a href="md/uniform_initialization.md">uniform_initialization</a> <br>
-👀 <a href="md/rtti.md">rtti</a>
+👀 <a href="md/rtti.md">rtti</a> <br>
 👀 <a href="md/static_assert.md">static_assert</a>
