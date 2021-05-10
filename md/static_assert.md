@@ -24,7 +24,7 @@ message는 string literal 타입이기 때문에 동적으로 결정되는 정�
 template <typename T>
 class Number 
 {
-  // 숫자 타입만 입력받을 수 있다. 
+        // 숫자 타입만 입력받을 수 있다. 
 	static_assert(std::is_arithmetic_v<T>, "invalid type.");
 
 public:
