@@ -33,7 +33,7 @@ public:
 	T* const getRaw();
 	
 	ArrayList& operator=(const ArrayList& rhs); 
-	ArrayList& operator==(ArrayList&& rhs) noexcept; 
+	ArrayList& operator=(ArrayList&& rhs) noexcept; 
 	T& operator[](const size_t index);
 
 	void show(const std::string& name) const;
@@ -205,7 +205,7 @@ ArrayList<T>& ArrayList<T>::operator=(const ArrayList& rhs)
 }
 
 template<typename T>
-ArrayList<T>& ArrayList<T>::operator==(ArrayList&& rhs) noexcept
+ArrayList<T>& ArrayList<T>::operator=(ArrayList&& rhs) noexcept
 {
 	if (this == &rhs)
 		return *this;
@@ -214,6 +214,8 @@ ArrayList<T>& ArrayList<T>::operator==(ArrayList&& rhs) noexcept
 	__capacity = rhs.__capacity; 
 
 	std::swap(__pMemory, rhs.__pMemory); 
+
+	return *this; 
 }
 
 template <typename T>
