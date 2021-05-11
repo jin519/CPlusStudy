@@ -12,7 +12,7 @@ int main()
 	{ 
 		varMain, 
 		staticCalculatorMain, 
-		arrayListMain, 
+		arrayListMain
 	};
 
 	return fp[2](); 
