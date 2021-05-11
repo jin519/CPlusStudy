@@ -4,6 +4,6 @@
     <ClInclude Include="ArrayList.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dummy.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
 </Project>
