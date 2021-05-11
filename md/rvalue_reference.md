@@ -207,10 +207,6 @@ int main()
 		forwarding reference는 template을 사용하는 경우에만 제한적으로 활성화된다.
 		자세히 얘기하자면 template type parameter를 사용하는 경우, 그리고 그 type parameter를 &&로 받는 변수를
 		선언하는 경우 그 변수는 forwarding reference가 된다.
-
-		추가 과제:
-		volatile 키워드, std::remove_reference, std::remove_const, std::remove_volatile에 대해 조사할 것.
-		그리고 이들의 type alias인 remove_reference_t, remove_cv, remove_cvref_t 등에 대해서도 조사할 것.
 	*/
 
 	// testFunc2의 $Type &&value는 TestClass &value가 된다. (함수에 마우스를 올려볼 것)
