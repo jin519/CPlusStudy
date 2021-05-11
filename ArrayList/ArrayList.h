@@ -28,6 +28,9 @@ public:
 
 	const T* const getRaw() const;
 	T* const getRaw();
+	
+	ArrayList& operator=(const ArrayList& rhs); 
+	ArrayList& operator=(ArrayList&& rhs) noexcept; 
 
 	T& operator[](const size_t index);
 
@@ -151,6 +154,42 @@ template<typename T>
 T* const ArrayList<T>::getRaw()
 {
 	return __pMemory;
+}
+
+template<typename T>
+ArrayList<T>& ArrayList<T>::operator=(const ArrayList& rhs)
+{
+	if (this == &rhs)
+		return *this; 
+
+	if (__pMemory)
+		__free(); 
+
+	const size_t size = rhs.__size;
+
+	if (size)
+	{
+		const size_t memSize = (sizeof(T) * size);
+
+		__malloc(size);
+		memcpy(__pMemory, rhs.__pMemory, memSize);
+	}
+
+	return *this; 
+}
+
+template<typename T>
+ArrayList<T>& ArrayList<T>::operator=(ArrayList&& rhs) noexcept
+{
+	if (this == &rhs)
+		return *this;
+
+	__size = rhs.__size; 
+	__capacity = rhs.__capacity; 
+
+	std::swap(__pMemory, rhs.__pMemory); 
+
+	return *this; 
 }
 
 template <typename T>
