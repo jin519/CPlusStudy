@@ -70,6 +70,12 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ArrayList\ArrayList.vcxproj">
+      <Project>{5f928571-411f-4f81-b1a4-e18f15efdda4}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\StaticCalculator\StaticCalculator.vcxproj">
+      <Project>{b2be17ee-02ae-4158-b453-12b7e517abf0}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Var\Var.vcxproj">
       <Project>{2d566859-9659-40ea-bb45-a9add4a74ccf}</Project>
     </ProjectReference>
