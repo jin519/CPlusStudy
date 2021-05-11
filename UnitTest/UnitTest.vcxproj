@@ -36,7 +36,6 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ArrayListTest.cpp" />
     <ClCompile Include="StaticCalculatorTest.cpp" />
     <ClCompile Include="VarTest.cpp" />
     <ClCompile Include="pch.cpp">
@@ -50,9 +49,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ArrayList\ArrayList.vcxproj">
-      <Project>{5f928571-411f-4f81-b1a4-e18f15efdda4}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\StaticCalculator\StaticCalculator.vcxproj">
       <Project>{b2be17ee-02ae-4158-b453-12b7e517abf0}</Project>
     </ProjectReference>

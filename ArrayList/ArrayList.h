@@ -17,9 +17,6 @@ public:
 	
 	explicit ArrayList(const std::initializer_list<T> args) noexcept;
 
-	ArrayList(const ArrayList& src); 
-	ArrayList(ArrayList&& src) noexcept; 
-
 	~ArrayList() noexcept;
 
 	void add(const T& value);
@@ -31,9 +28,7 @@ public:
 
 	const T* const getRaw() const;
 	T* const getRaw();
-	
-	ArrayList& operator=(const ArrayList& rhs); 
-	ArrayList& operator==(ArrayList&& rhs) noexcept; 
+
 	T& operator[](const size_t index);
 
 	void show(const std::string& name) const;
@@ -62,37 +57,13 @@ ArrayList<T>::ArrayList(const std::initializer_list<T> args) noexcept
 	__init(args);
 }
 
-template<typename T>
-ArrayList<T>::ArrayList(const ArrayList& src)
-{
-	const size_t size = src.__size; 
-	
-	if (size) 
-	{
-		const size_t memSize = (sizeof(T) * size);
-
-		__malloc(src.__size); 
-		memcpy(__pMemory, src.__pMemory, memSize); 
-	}
-}
-
-template<typename T>
-ArrayList<T>::ArrayList(ArrayList&& src) noexcept
-{
-	std::swap(__pMemory, src.__pMemory);
-
-	__size = src.__size; 
-	__capacity = src.__capacity; 
-}
-
 template <typename T>
 ArrayList<T>::~ArrayList() noexcept
 {
 	__size = 0ULL;
 	__capacity = 0ULL;
 
-	if (__pMemory)
-		__free();
+	__free();
 }
 
 template <typename T>
@@ -182,40 +153,6 @@ T* const ArrayList<T>::getRaw()
 	return __pMemory;
 }
 
-template<typename T>
-ArrayList<T>& ArrayList<T>::operator=(const ArrayList& rhs)
-{
-	if (this == &rhs)
-		return *this; 
-
-	if (__pMemory)
-		__free(); 
-
-	const size_t size = rhs.__size;
-
-	if (size)
-	{
-		const size_t memSize = (sizeof(T) * size);
-
-		__malloc(size);
-		memcpy(__pMemory, rhs.__pMemory, memSize);
-	}
-
-	return *this; 
-}
-
-template<typename T>
-ArrayList<T>& ArrayList<T>::operator==(ArrayList&& rhs) noexcept
-{
-	if (this == &rhs)
-		return *this;
-
-	__size = rhs.__size; 
-	__capacity = rhs.__capacity; 
-
-	std::swap(__pMemory, rhs.__pMemory); 
-}
-
 template <typename T>
 T& ArrayList<T>::operator[](const size_t index)
 {
@@ -239,8 +176,11 @@ void ArrayList<T>::show(const std::string& name) const
 template<typename T>
 void ArrayList<T>::__free()
 {
-	delete[] __pMemory;
-	__pMemory = nullptr;
+	if (__pMemory)
+	{
+		delete[] __pMemory;
+		__pMemory = nullptr;
+	}
 }
 
 template<typename T>
