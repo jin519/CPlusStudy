@@ -6,4 +6,5 @@
 👀 <a href="./md/constexpr.md">constexpr</a> <br>
 👀 <a href="./md/static_assert.md">static_assert</a> <br>
 👀 <a href="./md/rvalue_reference.md">rvalue reference & forwarding reference</a> <br>
-👀 <a href="./md/volatile.md">volatile</a>
+👀 <a href="./md/volatile.md">volatile</a> <br>
+👀 <a href="./md/function.md">function</a>
