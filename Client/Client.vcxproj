@@ -70,6 +70,9 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FunctionHandling\FunctionHandling.vcxproj">
+      <Project>{57a62662-9c3f-4196-9afe-0b82a6767c3a}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Var\Var.vcxproj">
       <Project>{2d566859-9659-40ea-bb45-a9add4a74ccf}</Project>
     </ProjectReference>

@@ -1,15 +1,21 @@
-#include <iostream>
+ï»¿#include <iostream>
 
 using namespace std;
 
 int varMain();
 int staticCalculatorMain(); 
+int functionHandlingMain(); 
 
 int main() 
 {
-	int (*fp[2])() = { varMain, staticCalculatorMain };
+	int (*fp[])() = 
+	{ 
+		varMain, 
+		staticCalculatorMain, 
+		functionHandlingMain
+	};
 
-	return fp[1](); 
+	return fp[2](); 
 }
 
 // --------------------------- Var
@@ -30,7 +36,7 @@ struct TestStruct
 	TestStruct(const TestStruct& source) :
 		a{ source.a }, b{ source.b }, str{ source.str }
 	{
-		cout << "TestStruct(const TestStruct &source) È£Ãâ" << endl;
+		cout << "TestStruct(const TestStruct &source) í˜¸ì¶œ" << endl;
 	}
 
 	friend ostream& operator<<(ostream& o, const TestStruct& testStruct)
@@ -43,36 +49,36 @@ struct TestStruct
 int varMain()
 {
 	/*
-		¸ğµç º¯¼ö¸¦ ´ãÀ» ¼ö ÀÖ´Â Var Å¬·¡½º¸¦ ±¸ÇöÇÏ¿©¶ó.
-		¾Æ·¡ÀÇ ÄÚµå°¡ Á¤»óÀûÀ¸·Î µ¿ÀÛÇÒ ¼ö ÀÖµµ·Ï Var¸¦ ±¸ÇöÇÏ¿©¶ó.
+		ëª¨ë“  ë³€ìˆ˜ë¥¼ ë‹´ì„ ìˆ˜ ìˆëŠ” Var í´ë˜ìŠ¤ë¥¼ êµ¬í˜„í•˜ì—¬ë¼.
+		ì•„ë˜ì˜ ì½”ë“œê°€ ì •ìƒì ìœ¼ë¡œ ë™ì‘í•  ìˆ˜ ìˆë„ë¡ Varë¥¼ êµ¬í˜„í•˜ì—¬ë¼.
 
-		Å¬·¡½º´Â °¡»óÅ×ÀÌºí ¹× »ı¼º/¼Ò¸êÀÚ Ã³¸®¸¦ ±¸ÇöÇØ¾ß ÇÏ¹Ç·Î Ã³¸®ÇÏÁö ¾Ê´Â´Ù.
-		±âº»Å¸ÀÔ ÀÚ·á±¸Á¶ ¹× ±¸Á¶Ã¼¿¡ ´ëÇÑ Ã³¸®¸¸ ±¸ÇöÇÏ¿©¶ó.
+		í´ë˜ìŠ¤ëŠ” ê°€ìƒí…Œì´ë¸” ë° ìƒì„±/ì†Œë©¸ì ì²˜ë¦¬ë¥¼ êµ¬í˜„í•´ì•¼ í•˜ë¯€ë¡œ ì²˜ë¦¬í•˜ì§€ ì•ŠëŠ”ë‹¤.
+		ê¸°ë³¸íƒ€ì… ìë£Œêµ¬ì¡° ë° êµ¬ì¡°ì²´ì— ëŒ€í•œ ì²˜ë¦¬ë§Œ êµ¬í˜„í•˜ì—¬ë¼.
 
-		°ªÀÇ ÀÌµ¿, Áï rvalue µ¥ÀÌÅÍ¿¡ ´ëÇÑ Ã³¸®´Â ´Ù·çÁö ¾Ê´Â´Ù.
-		¸ğµç ´ëÀÔ or ÃÊ±âÈ­´Â µ¥ÀÌÅÍ º¹»ç¸¦ ±â¹İÀ¸·Î ¼öÇàÇÏ¿©¶ó.
+		ê°’ì˜ ì´ë™, ì¦‰ rvalue ë°ì´í„°ì— ëŒ€í•œ ì²˜ë¦¬ëŠ” ë‹¤ë£¨ì§€ ì•ŠëŠ”ë‹¤.
+		ëª¨ë“  ëŒ€ì… or ì´ˆê¸°í™”ëŠ” ë°ì´í„° ë³µì‚¬ë¥¼ ê¸°ë°˜ìœ¼ë¡œ ìˆ˜í–‰í•˜ì—¬ë¼.
 
-		º» ¹®Á¦ Ç®ÀÌ½Ã memcpy, memmove¿Í °°Àº ¸Ş¸ğ¸® Á¶ÀÛ ÇÔ¼ö¸¦ »ç¿ëÇÏÁö ¸» °Í.
+		ë³¸ ë¬¸ì œ í’€ì´ì‹œ memcpy, memmoveì™€ ê°™ì€ ë©”ëª¨ë¦¬ ì¡°ì‘ í•¨ìˆ˜ë¥¼ ì‚¬ìš©í•˜ì§€ ë§ ê²ƒ.
 
-		[Å°¿öµå]
+		[í‚¤ì›Œë“œ]
 		typeid, type_info:
-		runtime¿¡ Å¸ÀÔ Ã¼Å·ÀÌ °¡´ÉÇÑ Á¤º¸ (RTTI; RunTime Type Information)
+		runtimeì— íƒ€ì… ì²´í‚¹ì´ ê°€ëŠ¥í•œ ì •ë³´ (RTTI; RunTime Type Information)
 
 		placement new:
-		º°µµÀÇ ¸Ş¸ğ¸® placeholder¸¦ ¹Ì¸® È®º¸ ÈÄ ÇØ´ç ¿µ¿ª¿¡ ¸Ş¸ğ¸®¸¦ Àç»ı¼º.
+		ë³„ë„ì˜ ë©”ëª¨ë¦¬ placeholderë¥¼ ë¯¸ë¦¬ í™•ë³´ í›„ í•´ë‹¹ ì˜ì—­ì— ë©”ëª¨ë¦¬ë¥¼ ì¬ìƒì„±.
 	*/
-	// ºó var º¯¼ö »ı¼º
+	// ë¹ˆ var ë³€ìˆ˜ ìƒì„±
 	Var var1;
 
-	// int °ªÀ» ´ëÀÔ
+	// int ê°’ì„ ëŒ€ì…
 	var1 = 1;
 
 	try
 	{
-		// var1¿¡ ¼³Á¤ÇÑ Å¸ÀÔÀÎ int·Î Ä³½ºÆÃÇÏ¿© °ªÀ» ¾ò¾î¿È
+		// var1ì— ì„¤ì •í•œ íƒ€ì…ì¸ intë¡œ ìºìŠ¤íŒ…í•˜ì—¬ ê°’ì„ ì–»ì–´ì˜´
 		cout << var1.get<int>() << endl;
 
-		// var1¿¡ ¼³Á¤ÇÑ Å¸ÀÔÀÌ ¾Æ´Ñ float·Î Ä³½ºÆÃ. exceptionÀÌ ¹ß»ıµÇ¾î¾ß ÇÑ´Ù.
+		// var1ì— ì„¤ì •í•œ íƒ€ì…ì´ ì•„ë‹Œ floatë¡œ ìºìŠ¤íŒ…. exceptionì´ ë°œìƒë˜ì–´ì•¼ í•œë‹¤.
 		cout << var1.get<float>() << endl;
 	}
 	catch (const exception& e)
@@ -80,21 +86,21 @@ int varMain()
 		cout << e.what() << endl;
 	}
 
-	// float °ªÀ¸·Î Àç¼³Á¤
+	// float ê°’ìœ¼ë¡œ ì¬ì„¤ì •
 	var1 = 10.234f;
 
-	// ÀÌÁ¦ exceptionÀÌ ¹ß»ıÇÏÁö ¾ÊÀ½
+	// ì´ì œ exceptionì´ ë°œìƒí•˜ì§€ ì•ŠìŒ
 	cout << var1.get<float>() << endl;
 
 	const TestStruct testStruct{ 10, 200., "this is test" };
 
-	// TestStruct µ¥ÀÌÅÍ¸¦ Var »ı¼º°ú µ¿½Ã¿¡ »ğÀÔ
+	// TestStruct ë°ì´í„°ë¥¼ Var ìƒì„±ê³¼ ë™ì‹œì— ì‚½ì…
 	const Var var{ testStruct };
 
-	// TestStruct Ãâ·Â
+	// TestStruct ì¶œë ¥
 	cout << var.get<TestStruct>() << endl;
 
-	// Var °´Ã¼ ¼Ò¸ê ½Ã ³»ºÎ ¸Ş¸ğ¸® ¸±¸®Áî ÇÊ¿ä.
+	// Var ê°ì²´ ì†Œë©¸ ì‹œ ë‚´ë¶€ ë©”ëª¨ë¦¬ ë¦´ë¦¬ì¦ˆ í•„ìš”.
 
 	return 0; 
 }
@@ -113,31 +119,31 @@ static constexpr T getNumberValue(const Number<T>& src)
 int staticCalculatorMain() 
 {
 	/*
-		ÄÄÆÄÀÏ Å¸ÀÓ¿¡ µ¿ÀÛÀÌ ¸ğµÎ °áÁ¤µÇ´Â static calculator¸¦ ±¸ÇöÇÏ¿©¶ó.
-		¾Æ·¡ÀÇ ÄÚµå°¡ Á¤»ó µ¿ÀÛÇÏµµ·Ï ·ÎÁ÷À» ±¸ÇöÇÏ¿©¶ó.
+		ì»´íŒŒì¼ íƒ€ì„ì— ë™ì‘ì´ ëª¨ë‘ ê²°ì •ë˜ëŠ” static calculatorë¥¼ êµ¬í˜„í•˜ì—¬ë¼.
+		ì•„ë˜ì˜ ì½”ë“œê°€ ì •ìƒ ë™ì‘í•˜ë„ë¡ ë¡œì§ì„ êµ¬í˜„í•˜ì—¬ë¼.
 	*/
 
 	/*
-		ÅÛÇÃ¸´ ÆÄ¶ó¹ÌÅÍ·Î ¼ıÀÚ Å¸ÀÔ¸¸ ÀÔ·Â¹ŞÀ» ¼ö ÀÖ´Â
-		Number Å¬·¡½º¸¦ ±¸ÇöÇÏ¿©¶ó. »ı¼ºÀÚ·Î´Â value¸¦ ÇÏ³ª ÀÔ·Â¹ŞÀ» ¼ö ÀÖ´Ù.
-		»ı¼ºÀÚ´Â constexpr »ı¼ºÀÚ·Î ¸¸µéÀ¸½Ã¿À.
+		í…œí”Œë¦¿ íŒŒë¼ë¯¸í„°ë¡œ ìˆ«ì íƒ€ì…ë§Œ ì…ë ¥ë°›ì„ ìˆ˜ ìˆëŠ”
+		Number í´ë˜ìŠ¤ë¥¼ êµ¬í˜„í•˜ì—¬ë¼. ìƒì„±ìë¡œëŠ” valueë¥¼ í•˜ë‚˜ ì…ë ¥ë°›ì„ ìˆ˜ ìˆë‹¤.
+		ìƒì„±ìëŠ” constexpr ìƒì„±ìë¡œ ë§Œë“¤ìœ¼ì‹œì˜¤.
 
-		Âü°í: static_assert¸¦ Å¬·¡½º ¼±¾ğºÎ¿¡ Á÷Á¢ ÀÔ·Â ½Ã ÄÄÆÄÀÏ Å¸ÀÓ¿¡
-		Å¸ÀÔ ÆÄ¶ó¹ÌÅÍ¸¦ Ã¼Å©ÇÒ ¼ö ÀÖ´Ù.
-		¿¹)
+		ì°¸ê³ : static_assertë¥¼ í´ë˜ìŠ¤ ì„ ì–¸ë¶€ì— ì§ì ‘ ì…ë ¥ ì‹œ ì»´íŒŒì¼ íƒ€ì„ì—
+		íƒ€ì… íŒŒë¼ë¯¸í„°ë¥¼ ì²´í¬í•  ìˆ˜ ìˆë‹¤.
+		ì˜ˆ)
 		class Test
 		{
 			static_assert(false, "false!");
 		};
 
-		static_assert¿¡ ´ëÇØ Á¶»çÇÏ°í ±ÛÀ» Á¤¸®ÇÏ¿©¶ó.
+		static_assertì— ëŒ€í•´ ì¡°ì‚¬í•˜ê³  ê¸€ì„ ì •ë¦¬í•˜ì—¬ë¼.
 	*/
 	constexpr Number<float> number1{ 5.f };
 
 	/*
-		Number Å¸ÀÔÀ» ÀÔ·Â¹Ş¾Æ ³»ºÎÀÇ value¸¦ ¹İÈ¯ÇÏ´Â getNumberValue()
-		ÇÔ¼ö¸¦ ±¸ÇöÇÏ¿©¶ó. getNumberValue() ÇÔ¼ö´Â constexpr ÇÔ¼ö·Î ±¸ÇöÇÑ´Ù.
-		Number Å¬·¡½º¿¡¼­ °ªÀ» Á¦°øÇÏ±â À§ÇØ getValue() ¸â¹ö ÇÔ¼ö¸¦ ±¸ÇöÇÑ´Ù.
+		Number íƒ€ì…ì„ ì…ë ¥ë°›ì•„ ë‚´ë¶€ì˜ valueë¥¼ ë°˜í™˜í•˜ëŠ” getNumberValue()
+		í•¨ìˆ˜ë¥¼ êµ¬í˜„í•˜ì—¬ë¼. getNumberValue() í•¨ìˆ˜ëŠ” constexpr í•¨ìˆ˜ë¡œ êµ¬í˜„í•œë‹¤.
+		Number í´ë˜ìŠ¤ì—ì„œ ê°’ì„ ì œê³µí•˜ê¸° ìœ„í•´ getValue() ë©¤ë²„ í•¨ìˆ˜ë¥¼ êµ¬í˜„í•œë‹¤.
 	*/
 	constexpr float val1 = getNumberValue<float>(number1);
 
@@ -145,20 +151,20 @@ int staticCalculatorMain()
 	constexpr float val2 = getNumberValue(number2);
 
 	/*
-		ÄÄÆÄÀÏ Å¸ÀÓ¿¡ µÎ ¼ıÀÚ¸¦ ÀÔ·Â¹Ş¾Æ ¿¬»êÀ» ¼öÇàÇÏ´Â StaticCalculator Å¬·¡½º¸¦
-		±¸ÇöÇÏ¿©¶ó. ÀÌ Å¬·¡½º´Â ÀÎ½ºÅÏ½º¸¦ »ı¼ºÇÒ ¼ö ¾ø¾î¾ß ÇÏ¸ç, calc static ÇÔ¼ö¸¦
-		ÅëÇØ °è»ê °á°ú °ªÀ» ¹İÈ¯ÇÑ´Ù.
+		ì»´íŒŒì¼ íƒ€ì„ì— ë‘ ìˆ«ìë¥¼ ì…ë ¥ë°›ì•„ ì—°ì‚°ì„ ìˆ˜í–‰í•˜ëŠ” StaticCalculator í´ë˜ìŠ¤ë¥¼
+		êµ¬í˜„í•˜ì—¬ë¼. ì´ í´ë˜ìŠ¤ëŠ” ì¸ìŠ¤í„´ìŠ¤ë¥¼ ìƒì„±í•  ìˆ˜ ì—†ì–´ì•¼ í•˜ë©°, calc static í•¨ìˆ˜ë¥¼
+		í†µí•´ ê³„ì‚° ê²°ê³¼ ê°’ì„ ë°˜í™˜í•œë‹¤.
 
-		ÅÛÇÃ¸´ ÆÄ¶ó¹ÌÅÍ´Â Â÷·Ê·Î <number Å¸ÀÔ, lhs, rhs, ¿¬»ê Å¸ÀÔ> ÀÌ´Ù.
-		¿¬»ê Å¸ÀÔÀº PLUS, MINUS, PRODUCT, DIVIDE ³× °¡Áö¸¦ Á¦°øÇÏ¿©¾ß ÇÑ´Ù.
-		¿¬»ê Å¸ÀÔÀº constexpr ºĞ±â¹®À» ÅëÇØ Á¶»çÇÏ½Ã¿À.
+		í…œí”Œë¦¿ íŒŒë¼ë¯¸í„°ëŠ” ì°¨ë¡€ë¡œ <number íƒ€ì…, lhs, rhs, ì—°ì‚° íƒ€ì…> ì´ë‹¤.
+		ì—°ì‚° íƒ€ì…ì€ PLUS, MINUS, PRODUCT, DIVIDE ë„¤ ê°€ì§€ë¥¼ ì œê³µí•˜ì—¬ì•¼ í•œë‹¤.
+		ì—°ì‚° íƒ€ì…ì€ constexpr ë¶„ê¸°ë¬¸ì„ í†µí•´ ì¡°ì‚¬í•˜ì‹œì˜¤.
 
-		calcResult1 À§¿¡ ¸¶¿ì½º¸¦ ¿Ã·Á 15.0f¶ó´Â °ªÀÌ ¹Ì¸®º¸±â·Î Ãâ·ÂµÇ´ÂÁö È®ÀÎÇÏ¿©¶ó.
+		calcResult1 ìœ„ì— ë§ˆìš°ìŠ¤ë¥¼ ì˜¬ë ¤ 15.0fë¼ëŠ” ê°’ì´ ë¯¸ë¦¬ë³´ê¸°ë¡œ ì¶œë ¥ë˜ëŠ”ì§€ í™•ì¸í•˜ì—¬ë¼.
 	*/
 	constexpr float calcResult1 =
 		StaticCalculator<float, val1, val2, OperationType::PLUS>::calc();
 
-	// 15 Ãâ·Â
+	// 15 ì¶œë ¥
 	cout << "calcResult1:" << calcResult1 << endl;
 
 	constexpr Number<int> number3{ 70 };
@@ -167,11 +173,76 @@ int staticCalculatorMain()
 	constexpr int calcResult2 =
 		StaticCalculator<int, number3.getValue(), number4.getValue(), OperationType::DIVIDE>::calc();
 
-	// 7 Ãâ·Â
+	// 7 ì¶œë ¥
 	cout << "calcResult2:" << calcResult2 << endl;
 
-	// Å©±â 7ÀÎ ¹è¿­ »ı¼º
+	// í¬ê¸° 7ì¸ ë°°ì—´ ìƒì„±
 	int arr[calcResult2]{};
+
+	return 0;
+}
+
+// --------------------------- FunctionHandling
+
+#include "../FunctionHandling/Lurker.h"
+#include "../FunctionHandling/Tank.h"
+
+int functionHandlingMain()
+{
+	Lurker lurker{ 225 };
+	Tank tank{ 175 };
+
+	static constexpr auto attackEachOther = [](Unit& lurker, Unit& tank)
+	{
+		lurker.attack(tank); 
+		tank.attack(lurker); 
+	};
+
+	attackEachOther(lurker, tank);
+	cout << "ê³µê²© 1íšŒ" << endl;
+	cout << "Lurker: " << lurker << endl;
+	cout << "Tank: " << tank << endl << endl;
+
+	attackEachOther(lurker, tank);
+	cout << "ê³µê²© 2íšŒ" << endl;
+	cout << "Lurker: " << lurker << endl;
+	cout << "Tank: " << tank << endl << endl;
+
+	lurker.burrow(true);
+	tank.attack(lurker);
+	cout << "ê³µê²© 3íšŒ" << endl;
+	cout << "Lurker: " << lurker << endl;
+	cout << "Tank: " << tank << endl << endl;
+
+	attackEachOther(lurker, tank);
+	cout << "ê³µê²© 4íšŒ" << endl;
+	cout << "Lurker: " << lurker << endl;
+	cout << "Tank: " << tank << endl << endl;
+
+	lurker.attack(tank);
+	tank.setSeigeMode(true);
+	cout << "ê³µê²© 5íšŒ" << endl;
+	cout << "Lurker: " << lurker << endl;
+	cout << "Tank: " << tank << endl << endl;
+
+	attackEachOther(lurker, tank);
+	cout << "ê³µê²© 6íšŒ" << endl;
+	cout << "Lurker: " << lurker << endl;
+	cout << "Tank: " << tank << endl << endl;
+
+	attackEachOther(lurker, tank);
+	cout << "ê³µê²© 7íšŒ" << endl;
+	cout << "Lurker: " << lurker << endl;
+	cout << "Tank: " << tank << endl << endl;
+
+	if (lurker.isAlive() && !tank.isAlive())
+		cout << "Lurker ìŠ¹" << endl;
+
+	else if (!lurker.isAlive() && tank.isAlive())
+		cout << "Tank ìŠ¹" << endl;
+
+	else
+		cout << "ë¬´ìŠ¹ë¶€" << endl;
 
 	return 0;
 }
