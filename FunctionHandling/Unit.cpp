@@ -12,8 +12,7 @@ bool Unit::isAlive() const
 
 void Unit::attack(Unit& unit) const
 {
-	const int damage = _getDamage(); 
-	unit.__hp -= damage; 
+	unit.__hp -= _getDamage();
 }
 
 ostream& operator<<(ostream& o, const Unit& unit)
