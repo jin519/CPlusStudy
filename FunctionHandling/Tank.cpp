@@ -7,23 +7,20 @@ Tank::Tank(const int hp) : Unit{ hp }
 
 void Tank::setSeigeMode(const bool onOff)
 {
-	if (onOff)
-	{
-		__pDamageFunc = []() -> int
-		{
-			return 70;
-		};
-	}
-	else
-	{
-		__pDamageFunc = []() -> int
-		{
-			return 25;
-		};
-	}
+	__pGetDamage = onOff ? &Tank::__getOnDamage : &Tank::__getOffDamage;
 }
 
 int Tank::_getDamage() const
 {
-	return __pDamageFunc();
+	return (this->*__pGetDamage)(); 
+}
+
+int Tank::__getOnDamage() const
+{
+	return 70; 
+}
+
+int Tank::__getOffDamage() const
+{
+	return 25; 
 }

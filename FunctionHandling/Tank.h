@@ -13,5 +13,8 @@ protected:
 	virtual int _getDamage() const override;
 
 private:
-	int(*__pDamageFunc)();
+	int(Tank::* __pGetDamage)() const = &Tank::_getDamage;
+
+	int __getOnDamage() const; 
+	int __getOffDamage() const; 
 };

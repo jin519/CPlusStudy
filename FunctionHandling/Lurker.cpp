@@ -7,23 +7,20 @@ Lurker::Lurker(const int hp) : Unit{ hp }
 
 void Lurker::burrow(const bool onOff)
 {
-	if (onOff) 
-	{
-		__pDamageFunc = []() -> int
-		{
-			return 40;
-		};
-	}
-	else 
-	{
-		__pDamageFunc = []() -> int
-		{
-			return 0;
-		};
-	}
+	__pGetDamage = onOff ? &Lurker::__getOnDamage : &Lurker::__getOffDamage;
 }
 
 int Lurker::_getDamage() const
 {
-	return __pDamageFunc(); 
+	return (this->*__pGetDamage)(); 
+}
+
+int Lurker::__getOnDamage() const
+{
+	return 40;
+}
+
+int Lurker::__getOffDamage() const
+{
+	return 0;
 }

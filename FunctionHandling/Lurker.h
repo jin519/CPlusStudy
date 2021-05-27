@@ -13,5 +13,8 @@ protected:
 	virtual int _getDamage() const override;
 
 private:
-	int(*__pDamageFunc)(); 
+	int(Lurker::* __pGetDamage)() const = &Lurker::_getDamage;
+
+	int __getOnDamage() const;
+	int __getOffDamage() const;
 };
