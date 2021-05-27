@@ -7,10 +7,7 @@ Unit::Unit(const int hp) : __hp(hp)
 
 bool Unit::isAlive() const
 {
-	if (__hp > 0)
-		return true; 
-
-	return false;
+	return (__hp > 0);
 }
 
 void Unit::attack(Unit& unit) const
