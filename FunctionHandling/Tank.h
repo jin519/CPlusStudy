@@ -7,7 +7,7 @@ class Tank : public Unit
 public:
 	explicit Tank(const int hp); 
 
-	void setSeigeMode(const bool onOff);
+	constexpr void setSeigeMode(const bool onOff);
 
 protected:
 	virtual int _getDamage() const override;
@@ -15,6 +15,6 @@ protected:
 private:
 	int(Tank::* __pGetDamage)() const;
 
-	int __getOnDamage() const; 
-	int __getOffDamage() const; 
+	constexpr int __getOnDamage() const;
+	constexpr int __getOffDamage() const;
 };

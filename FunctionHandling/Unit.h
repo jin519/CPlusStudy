@@ -5,7 +5,7 @@
 class Unit 
 {
 public:
-	explicit Unit(const int hp); 
+	explicit Unit(const int hp);
 
 	bool isAlive() const;
 	void attack(Unit& unit) const;

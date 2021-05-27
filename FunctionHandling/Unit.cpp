@@ -2,7 +2,7 @@
 
 using namespace std; 
 
-Unit::Unit(const int hp) : __hp(hp)
+Unit::Unit(const int hp) : __hp{ hp }
 {}
 
 bool Unit::isAlive() const

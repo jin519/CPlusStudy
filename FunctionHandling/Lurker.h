@@ -6,8 +6,7 @@ class Lurker : public Unit
 {
 public:
 	explicit Lurker(const int hp); 
-
-	void burrow(const bool onOff);
+	constexpr void burrow(const bool onOff);
 
 protected:
 	virtual int _getDamage() const override;
@@ -15,6 +14,6 @@ protected:
 private:
 	int(Lurker::* __pGetDamage)() const;
 
-	int __getOnDamage() const;
-	int __getOffDamage() const;
+	constexpr int __getOnDamage() const;
+	constexpr int __getOffDamage() const;
 };
