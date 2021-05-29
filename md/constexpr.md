@@ -1,7 +1,7 @@
 # constexpr specifier
 
 constexpr은 컴파일 타임에 동작을 결정짓는 모던 c++ 패러다임에서 중요한 역할을 하는 키워드이다. <br>
-constexpr 키워드가 붙는 변수, 함수, 로직 등은 모두 컴파일 타임에 값이 결정되어 성능 향상에 큰 기여를 한다.
+constexpr 키워드가 붙는 변수, 함수, 로직 등은 모두 `컴파일 타임에 값이 결정`되어 성능 향상에 큰 기여를 한다.
 
 ### Example
 
@@ -10,6 +10,9 @@ template <int $val>
 class TestClass
 {
 public:
+	// 일반적으로 static 멤버 변수는 cpp 파일에서 초기화가 이루어지며, 이때 instance가 만들어진다.
+	// 선언과 동시에 초기화하기 위해서는 다음을 참고한다. static inline int VALUE = $val; 
+	// constexpr은 암묵적으로 inline 의미를 포함한다.
 	static constexpr int VALUE = $val;
 };
 
